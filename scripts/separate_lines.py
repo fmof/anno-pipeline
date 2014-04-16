@@ -11,22 +11,32 @@
 # Courtney Napoles, cdnapoles@gmail.com
 # 2012-06-29
 
-import sys, os 
+import sys, os
 from subprocess import call
 
 
 markup_path = sys.argv[1]
 markupfile = open(markup_path,'wb')
 
+inText = False
+
 for line in sys.stdin :
-    if line.startswith('<') :
+    if line.startswith("<TEXT") :
+        inText = True
         markupfile.write(line.rstrip()+'\n')
         print ''
-    elif len(line.split()) > 100 :
+    elif line.startswith("</TEXT>"):
+        inText = False
+        markupfile.write(line.rstrip()+'\n')
+        print ''
+    elif line.startswith('<'):
+        markupfile.write(line.rstrip()+'\n')
+        print ''
+    elif len(line.split()) > 100 or not(inText):
         markupfile.write(line.rstrip()+'\n')
         print ''
     else :
-        print line.strip()
         markupfile.write('\n')
-
+        print line.strip()
+#################################################
 markupfile.close()
