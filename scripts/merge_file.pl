@@ -36,11 +36,14 @@ $filename = $1;
 
 # assuming that the input is not proper XML, we need to 
 # add a root
-print "<FILE id=\"$filename\">\n";
+#print "<FILE id=\"$filename\">\n";
 foreach $parse_line (<PARSES>) {
     $markup_line = <MARKUP>;
     chomp($parse_line);
     chomp($markup_line);
+    if($markup_line =~ /^<\?xml/){
+	next;
+    }
     if ($parse_line =~ /^$/) {
 	# escape & if present and assume no angle brackets 
 	# in the markup (besides the expected ones)
@@ -53,7 +56,7 @@ foreach $parse_line (<PARSES>) {
     }
 }
 
-print "</FILE>\n";
+#print "</FILE>\n";
 
 close(PARSES);
 close(MARKUP);
